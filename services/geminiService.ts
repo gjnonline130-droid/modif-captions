@@ -13,15 +13,36 @@ export const generateCaption = async (
   location: string,
   cta: string
 ): Promise<string> => {
-  // Initialize AI client inside the function to prevent app crash on load
-  // if environment variables are not immediately available.
-  const API_KEY = process.env.API_KEY;
-
-  if (!API_KEY) {
-    throw new Error("API_KEY is not defined. Please check your Vercel Environment Variables.");
+  // Robust API Key Retrieval for Vercel + Vite environments
+  let apiKey = '';
+  
+  // 1. Try process.env (Node.js / CRA / Customized Vercel)
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      apiKey = process.env.API_KEY;
+    }
+  } catch (e) {
+    // Ignore ReferenceError if process is not defined
   }
 
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  // 2. Try import.meta.env (Standard Vite) if not found yet
+  if (!apiKey) {
+    try {
+      // @ts-ignore
+      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+        // @ts-ignore
+        apiKey = import.meta.env.VITE_API_KEY;
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
+
+  if (!apiKey) {
+    throw new Error("API Key hilang! Di Vercel, pastikan Anda menambah Environment Variable bernama 'VITE_API_KEY' (atau 'API_KEY') dengan nilai kunci Google AI Studio Anda.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
     let themeInstruction = '';
@@ -149,7 +170,7 @@ Aturan Wajib (Format Output):
     parts.push({ text: prompt });
 
     const response = await ai.models.generateContent({
-        model: 'gemini-flash-latest',
+        model: 'gemini-2.5-flash',
         contents: { parts },
         config: {
             temperature: temperature,
@@ -158,8 +179,9 @@ Aturan Wajib (Format Output):
     });
 
     return response.text.trim();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating caption with Gemini API:", error);
-    throw new Error("Failed to generate caption. Please check your API Key and internet connection.");
+    // Pass the actual error message to the UI for better debugging on Vercel
+    throw new Error(error.message || "Gagal membuat caption. Periksa koneksi atau API Key Anda.");
   }
 };

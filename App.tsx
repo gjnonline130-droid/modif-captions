@@ -73,8 +73,10 @@ const App: React.FC = () => {
         cta
       );
       setGeneratedCaption(caption);
-    } catch (err) {
-      setError('😕 Maaf, terjadi kesalahan saat membuat caption. Silakan coba lagi.');
+    } catch (err: any) {
+      // Show actual error message for better debugging
+      const errorMessage = err?.message || '😕 Maaf, terjadi kesalahan saat membuat caption. Silakan coba lagi.';
+      setError(errorMessage);
       console.error(err);
     } finally {
       setIsLoading(false);
