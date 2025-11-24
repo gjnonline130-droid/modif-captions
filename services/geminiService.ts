@@ -59,12 +59,12 @@ Gunakan gaya bahasa Gen Z / "Anak Jaksel" yang sangat cair, trendi, dan TIDAK MO
 - Hindari pola kalimat pembuka yang selalu sama. Jadilah kreatif dan tidak terduga.
 - Gunakan kombinasi emoji yang ekspresif (contoh: 😭, 💅, 🔥, ✨, 🗿, 💀, 🏃💨).
 `;
-        temperature = 0.9; // Higher temperature for high creativity and variety
+        temperature = 0.95; // Higher temperature for high creativity and variety
         break;
       case 'Non formal':
       default:
         themeInstruction = 'Gunakan gaya bahasa yang santai, ramah, hangat, dan mudah didekati seperti berbicara dengan teman akrab. Hindari kata-kata yang terlalu kaku.';
-        temperature = 0.75;
+        temperature = 0.8;
         break;
     }
 
@@ -117,12 +117,16 @@ Tugas: Buat caption Instagram yang menarik, rapi, dan menawan berdasarkan input 
 
 Input Pengguna:
 1. Hook (Judul/Pancingan): "${hook}"
-   - Instruksi: Jika user mengisi, pertajam kalimatnya agar lebih "nendang". Jika KOSONG, WAJIB buatlah HOOK VIRAL yang sangat "Thumb-Stopping" (membuat orang berhenti scrolling). Pilih satu dari strategi ini:
-     a. "Shocking Statement" (Pernyataan mengejutkan).
-     b. "Curiosity Gap" (Bikin penasaran parah).
-     c. "Relatable Pain/Joy" (Menyentuh masalah/kebahagiaan sehari-hari).
-     d. "Exclusive Secret" (Seolah membocorkan rahasia).
-     Pastikan Hook singkat, padat, dan langsung menarik perhatian di kalimat pertama. Sesuaikan dengan Tone ${theme}.
+   - Instruksi: Jika user mengisi, pertajam kalimatnya agar lebih "nendang". Jika KOSONG, WAJIB buatlah HOOK VIRAL yang UNIK dan SPESIFIK sesuai konteks konten.
+   - ⛔ DILARANG KERAS menggunakan kalimat klise/generik berulang seperti: "Stop Scrolling!", "Jangan di-skip!", "Tunggu dulu!", "Hai GJN People", atau "Wajib baca!". HINDARI HAL INI.
+   - ✅ Gunakan Variasi Strategi Hook berikut (pilih salah satu yang paling cocok dengan isi konten):
+     a. **The "Did You Know" Twist**: Fakta mengejutkan atau pertanyaan retoris tentang produk/promo. (Contoh: "Kira-kira berapa hematnya kalau belanja hari ini? 🤔")
+     b. **Direct Benefit/Outcome**: Langsung sebutkan hasil enak/manfaatnya. (Contoh: "Dapur auto glowing modal hemat? Bisa banget!")
+     c. **Negative Hook (Warning)**: Peringatan halus yang bikin penasaran. (Contoh: "Hati-hati, liat postingan ini bisa bikin laper mata! ⚠️")
+     d. **Specific Audience Callout**: Panggil spesifik target audiens. (Contoh: "Anak kost Jatinangor mana suaranyaa?? 📢")
+     e. **Story/Scene Starter**: Langsung masuk ke adegan cerita atau situasi relatable. (Contoh: "Lagi bengong mikirin mau masak apa, eh nemu ini...")
+     f. **Data/Number Hook**: Gunakan angka spesifik. (Contoh: "Cuma 3 hari aja, jangan sampe lolos!")
+   - Pastikan Hook singkat (maks 8 kata), padat, dan langsung relevan dengan ${content} atau Tone ${theme}.
 
 2. Gaya Bahasa (Tone): ${theme}
    - Instruksi Detail: ${themeInstruction}
@@ -147,7 +151,7 @@ Aturan Wajib (Format Output):
 1. SAPAAN: Captions HARUS diawali dengan kalimat: "Halo YO People! 👋" (Tanpa tanda petik).
 2. STRUKTUR: 
    - Sapaan
-   - Hook Viral (Headline)
+   - Hook Viral (Headline yang berbeda-beda tiap generate)
    - Isi Body (Gunakan paragraf pendek/spasi antar baris agar mudah dibaca di HP)
    - Detail Info (Periode/Tempat jika ada)
    - CTA Viral
@@ -176,7 +180,7 @@ Aturan Wajib (Format Output):
         config: {
             temperature: temperature,
             topP: 0.95,
-            maxOutputTokens: 600, // Slightly increased for better hooks/CTAs
+            maxOutputTokens: 800, 
             thinkingConfig: { thinkingBudget: 0 } // Low latency
         }
     });
