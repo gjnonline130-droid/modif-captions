@@ -74,10 +74,19 @@ const App: React.FC = () => {
       );
       setGeneratedCaption(caption);
     } catch (err: any) {
-      // Show actual error message for better debugging
-      const errorMessage = err?.message || '😕 Maaf, terjadi kesalahan saat membuat caption. Silakan coba lagi.';
+      // Show explicit error message
+      let errorMessage = '😕 Terjadi kesalahan.';
+      
+      if (err?.message) {
+        errorMessage = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      } else {
+        errorMessage = JSON.stringify(err);
+      }
+
       setError(errorMessage);
-      console.error(err);
+      console.error('App Error:', err);
     } finally {
       setIsLoading(false);
     }

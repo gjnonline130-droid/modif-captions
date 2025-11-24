@@ -16,22 +16,18 @@ export const generateCaption = async (
   // Robust API Key Retrieval for Vercel + Vite environments
   let apiKey = '';
   
-  // 1. Try process.env (Node.js / CRA / Customized Vercel)
-  try {
-    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-      apiKey = process.env.API_KEY;
-    }
-  } catch (e) {
-    // Ignore ReferenceError if process is not defined
+  // Priority 1: Vite Environment Variable (Standard for Vercel Vite deployments)
+  // @ts-ignore
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    apiKey = import.meta.env.VITE_API_KEY;
   }
 
-  // 2. Try import.meta.env (Standard Vite) if not found yet
+  // Priority 2: Process Env (Fallback for local or customized builds)
   if (!apiKey) {
     try {
-      // @ts-ignore
-      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
-        // @ts-ignore
-        apiKey = import.meta.env.VITE_API_KEY;
+      if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+        apiKey = process.env.API_KEY;
       }
     } catch (e) {
       // Ignore
@@ -39,7 +35,7 @@ export const generateCaption = async (
   }
 
   if (!apiKey) {
-    throw new Error("API Key hilang! Di Vercel, pastikan Anda menambah Environment Variable bernama 'VITE_API_KEY' (atau 'API_KEY') dengan nilai kunci Google AI Studio Anda.");
+    throw new Error("⚠️ API Key tidak ditemukan! Di Dashboard Vercel (Settings > Environment Variables), pastikan Key bernama 'VITE_API_KEY' (bukan hanya 'API_KEY').");
   }
 
   const ai = new GoogleGenAI({ apiKey });
@@ -181,7 +177,7 @@ Aturan Wajib (Format Output):
     return response.text.trim();
   } catch (error: any) {
     console.error("Error generating caption with Gemini API:", error);
-    // Pass the actual error message to the UI for better debugging on Vercel
-    throw new Error(error.message || "Gagal membuat caption. Periksa koneksi atau API Key Anda.");
+    // Return detailed error for UI
+    throw new Error(error.message || JSON.stringify(error) || "Terjadi kesalahan yang tidak diketahui pada koneksi API.");
   }
 };
