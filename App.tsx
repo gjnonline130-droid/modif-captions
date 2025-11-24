@@ -13,7 +13,6 @@ import { ImageUploader } from './components/ImageUploader';
 import { FormInput } from './components/FormInput';
 import { FormTextArea } from './components/FormTextArea';
 import { CaptionTypeSelector } from './components/CaptionTypeSelector';
-import { CaptionLengthSelector } from './components/CaptionLengthSelector';
 
 type Theme = 'light' | 'dark';
 type ImageData = { data: string; mimeType: string };
@@ -23,7 +22,7 @@ const App: React.FC = () => {
   const [image, setImage] = useState<ImageData | null>(null);
   const [hook, setHook] = useState<string>('');
   const [theme, setTheme] = useState<string>('Non formal');
-  const [captionLength, setCaptionLength] = useState<string>('Panjang');
+  // captionLength removed
   const [content, setContent] = useState<string>('');
   const [captionType, setCaptionType] = useState<string>('');
   const [period, setPeriod] = useState<string>('');
@@ -65,7 +64,7 @@ const App: React.FC = () => {
         image, 
         hook, 
         theme, 
-        captionLength,
+        // length removed
         content,
         captionType,
         period, 
@@ -90,7 +89,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [image, hook, theme, captionLength, content, captionType, period, location, cta]);
+  }, [image, hook, theme, content, captionType, period, location, cta]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedCaption);
@@ -128,18 +127,17 @@ const App: React.FC = () => {
             {/* 2. Hook (Improve AI) */}
             <FormInput 
               id="hook"
-              label="HOOK (Pancingan)"
+              label="HOOK (Pancingan Viral) 🔥"
               value={hook}
               onChange={(e) => setHook(e.target.value)}
-              placeholder="Tulis hook menarik atau biarkan kosong (Improve by AI)"
-              helperText="Opsional: Biarkan kosong jika ingin AI membuat hook otomatis."
+              placeholder="Tulis hook atau biarkan kosong untuk Hook Viral otomatis"
+              helperText="Opsional: Biarkan kosong, AI akan membuat Hook 'Thumb-Stopping' yang bikin penasaran!"
             />
 
             {/* 3. Theme Selector */}
             <ThemeSelector selectedTheme={theme} onThemeChange={setTheme} />
 
-            {/* 4. Length Selector */}
-            <CaptionLengthSelector selectedLength={captionLength} onLengthChange={setCaptionLength} />
+            {/* 4. Length Selector REMOVED */}
 
             {/* 5. Isi Captions */}
             <FormTextArea 
@@ -177,11 +175,11 @@ const App: React.FC = () => {
             {/* 9. CTA (Improve AI) */}
             <FormInput 
               id="cta"
-              label="CTA (Call to Action)"
+              label="CTA (Call to Action) 📣"
               value={cta}
               onChange={(e) => setCta(e.target.value)}
-              placeholder="Tulis ajakan atau biarkan kosong (Improve by AI)"
-              helperText="Opsional: Biarkan kosong jika ingin AI membuat ajakan otomatis."
+              placeholder="Tulis ajakan atau biarkan kosong untuk CTA High Engagement"
+              helperText="Opsional: Biarkan kosong, AI akan membuat ajakan interaktif (Like, Share, Save)!"
             />
 
             <div className="pt-4">

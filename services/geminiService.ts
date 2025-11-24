@@ -6,7 +6,7 @@ export const generateCaption = async (
   image: ImageData | null,
   hook: string,
   theme: string,
-  length: string,
+  // length parameter removed
   content: string,
   captionType: string,
   period: string,
@@ -105,13 +105,8 @@ Gunakan gaya bahasa Gen Z / "Anak Jaksel" yang sangat cair, trendi, dan TIDAK MO
             break;
     }
 
-    let lengthInstruction = '';
-    if (length === 'Pendek') {
-        lengthInstruction = 'PANJANG CAPTION: PENDEK & PADAT (Short Copy). Maksimal 1-3 paragraf singkat. Langsung pada poin utama (Straight to the point). Hilangkan basa-basi yang tidak perlu. Buat ringkas namun tetap powerful dan menarik perhatian.';
-    } else {
-        // Default to Panjang
-        lengthInstruction = 'PANJANG CAPTION: PANJANG & MENDETAIL (Long Copy/Storytelling). Jelaskan informasi secara komprehensif. Gunakan teknik Storytelling agar tidak membosankan. WAJIB gunakan spasi antar paragraf yang cukup, bullet points (jika ada list), dan pemanis visual agar teks enak dibaca (readable) dan tidak terlihat menumpuk.';
-    }
+    // New balanced length instruction
+    const lengthInstruction = 'PANJANG CAPTION: SEIMBANG (Balanced/Ideal). Tidak terlalu pendek (minimalis) sehingga informasi hilang, dan tidak terlalu panjang (bertele-tele) sehingga membosankan. Buatlah "pas" dan padat (compact). Gunakan sekitar 2-4 paragraf kecil. Gunakan spasi antar paragraf agar nyaman dibaca (scannable).';
 
     const defaultHashtags = "#GJN #griya_jatinangor #toserbagriyajatinangor #griyajatinangor #infojatinangor #jatinangorbanget #griya #toserbagriya #toserbayyogya #infoyogyagroup #belanjahematyayogya";
 
@@ -122,12 +117,18 @@ Tugas: Buat caption Instagram yang menarik, rapi, dan menawan berdasarkan input 
 
 Input Pengguna:
 1. Hook (Judul/Pancingan): "${hook}"
-   - Instruksi: Jika diisi, gunakan ini sebagai pembuka setelah sapaan. Jika kosong, buatlah hook yang sangat menarik perhatian, membuat orang berhenti scrolling (thumb-stopping), dan sesuai dengan Tone ${theme}.
+   - Instruksi: Jika user mengisi, pertajam kalimatnya agar lebih "nendang". Jika KOSONG, WAJIB buatlah HOOK VIRAL yang sangat "Thumb-Stopping" (membuat orang berhenti scrolling). Pilih satu dari strategi ini:
+     a. "Shocking Statement" (Pernyataan mengejutkan).
+     b. "Curiosity Gap" (Bikin penasaran parah).
+     c. "Relatable Pain/Joy" (Menyentuh masalah/kebahagiaan sehari-hari).
+     d. "Exclusive Secret" (Seolah membocorkan rahasia).
+     Pastikan Hook singkat, padat, dan langsung menarik perhatian di kalimat pertama. Sesuaikan dengan Tone ${theme}.
+
 2. Gaya Bahasa (Tone): ${theme}
    - Instruksi Detail: ${themeInstruction}
 3. Jenis Caption: ${captionType || 'Auto'}
    - Instruksi Khusus: ${typeInstruction}
-4. Panjang Caption: ${length || 'Panjang'}
+4. Panjang Caption: SEIMBANG
    - Instruksi Khusus: ${lengthInstruction}
 5. Isi Caption (Konteks Utama): "${content}"
    - Instruksi: Ini adalah inti pesan. Kembangkan menjadi deskripsi yang menarik sesuai Jenis Caption dan Panjang yang dipilih. ${image ? "Analisis juga gambar yang diunggah untuk mendeskripsikan visual, suasana, atau teks di dalamnya secara akurat dan integrasikan ke dalam cerita caption." : ""}
@@ -136,16 +137,20 @@ Input Pengguna:
 7. Tempat/Area: "${location}"
    - Instruksi: Jika ada, sebutkan lokasi ini (misalnya dengan emoji 📍).
 8. CTA (Call to Action): "${cta}"
-   - Instruksi: Jika diisi, gunakan sebagai penutup. Jika kosong, buatkan ajakan bertindak yang persuasif namun tidak memaksa (misalnya "Gaskeun sekarang!", "Tag bestie kamu!", dll) sesuai gaya bahasa.
+   - Instruksi: Jika user mengisi, gunakan sebagai penutup. Jika KOSONG, WAJIB buatkan CTA VIRAL yang memancing interaksi (Engagement Bait). Jangan hanya suruh beli. Pilih strategi:
+     a. Ajak "Save" untuk dibaca nanti.
+     b. Ajak "Share" ke teman/keluarga yang butuh info ini.
+     c. Ajak "Komen" dengan pertanyaan pancingan atau pilihan (A/B).
+     d. Gunakan FOMO (Takut ketinggalan) atau Scarcity (Keterbatasan) jika relevan.
 
 Aturan Wajib (Format Output):
 1. SAPAAN: Captions HARUS diawali dengan kalimat: "Halo YO People! 👋" (Tanpa tanda petik).
 2. STRUKTUR: 
    - Sapaan
-   - Hook (Headline)
+   - Hook Viral (Headline)
    - Isi Body (Gunakan paragraf pendek/spasi antar baris agar mudah dibaca di HP)
    - Detail Info (Periode/Tempat jika ada)
-   - CTA
+   - CTA Viral
 3. TAGAR: Captions HARUS diakhiri dengan tagar berikut (Wajib ada semua):
    ${defaultHashtags}
    
@@ -171,6 +176,8 @@ Aturan Wajib (Format Output):
         config: {
             temperature: temperature,
             topP: 0.95,
+            maxOutputTokens: 600, // Slightly increased for better hooks/CTAs
+            thinkingConfig: { thinkingBudget: 0 } // Low latency
         }
     });
 
