@@ -1,13 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-
-if (!API_KEY) {
-  throw new Error("API_KEY is not defined in environment variables");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
-
 type ImageData = { data: string; mimeType: string };
 
 export const generateCaption = async (
@@ -21,6 +13,16 @@ export const generateCaption = async (
   location: string,
   cta: string
 ): Promise<string> => {
+  // Initialize AI client inside the function to prevent app crash on load
+  // if environment variables are not immediately available.
+  const API_KEY = process.env.API_KEY;
+
+  if (!API_KEY) {
+    throw new Error("API_KEY is not defined. Please check your Vercel Environment Variables.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
+
   try {
     let themeInstruction = '';
     let temperature = 0.7; // Default temperature
@@ -158,6 +160,6 @@ Aturan Wajib (Format Output):
     return response.text.trim();
   } catch (error) {
     console.error("Error generating caption with Gemini API:", error);
-    throw new Error("Failed to generate caption.");
+    throw new Error("Failed to generate caption. Please check your API Key and internet connection.");
   }
 };
